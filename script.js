@@ -171,26 +171,26 @@ const calcDisplayBalance = function(movements){
 };
 calcDisplayBalance(account1.movements)
 
-const calcDisplaySummary = function (movements){
-    const incomes = movements
+const calcDisplaySummary = function (acc){
+    const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc,mov) => acc + mov);
     labelSumIn.textContent = `${incomes}€`;
 
-    const out = movements.filter(mov => mov < 0)
+    const out = acc.movements.filter(mov => mov < 0)
     .reduce((acc,mov) => acc + mov); // accumulator acumula os valores e mov percorre os valores
     labelSumOut.textContent = `${Math.abs(out)}€` // isso remove o sinal de menos
 
-    const interest = movements
+    const interest = acc.movements
     .filter(mov => mov > 0) // mapeia valores maior que zero
-    .map(deposit => (deposit * 1.2) / 100) // função da conta de ver o juros
+    .map(deposit => (deposit * acc.interesRate) / 100) // função da conta de ver o juros
     .filter((int,i,arr) =>{ // filtra números
         return int >= 1; // essa é uma regra que tem em bancos, então o banco só pega juros acima de 1€
     })
     .reduce((acc, int) => acc + int); // accumulator aculua os valores e int vai pagando os proximos valores e somando
     labelSumInterest.textContent = `${interest}€`;
 }
-calcDisplaySummary(account1.movements)
+// calcDisplaySummary(account1.acc)
 /// #1 CHALLENGE
  /*
     const checkDogs = function (dogsJulia, dogsKate){
@@ -260,14 +260,38 @@ const createUsernames = function(accs){
     //-> join :  faz todas as letras ficarem numa coisa só então ná array fica ´j´,'f' vira 'jf'
 }
 createUsernames(accounts);
-console.log(accounts);
+// console.log(accounts);
+
+let currentAccount;
 
 btnLogin.addEventListener('click',function(e){
     
     // Prevent form from submittng
     e.preventDefault()
     
-    console.log('login')
+    currentAccount = accounts.find(
+        acc => acc.username === inputLoginUsername.value
+    );
+    console.log(currentAccount);
+
+    if (currentAccount?.pin === Number(inputLoginPin.value)){
+        // Display UI and message
+        labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
+
+        containerApp.style.opacity = 100;
+        
+        // This stay clean the input
+        inputLoginUsername.value = inputLoginPin.value = '';
+        // Retire the cursor of the input
+        inputLoginPin.blur();
+        // Display movements
+        displayMovements(currentAccount.movements)
+        // Display balance
+        calcDisplayBalance(currentAccount.movements);
+        // Display summary
+        calcDisplaySummary(currentAccount)
+    }
+
 })
 
 // AULA 11
