@@ -164,12 +164,12 @@ movements.forEach(function(mov, i ){
 displayMovements(account1.movements)
 
 
-const calcDisplayBalance = function(movements){
-    const balance = movements
+const calcDisplayBalance = function(acc){
+    acc.balance = acc.movements
     .reduce((acc, mov) => acc +mov,0);
-    labelBalance.textContent = `${balance} €`;
+    labelBalance.textContent = `${acc.balance} €`;
 };
-calcDisplayBalance(account1.movements)
+//calcDisplayBalance(account1.movements)
 
 const calcDisplaySummary = function (acc){
     const incomes = acc.movements
@@ -287,13 +287,26 @@ btnLogin.addEventListener('click',function(e){
         // Display movements
         displayMovements(currentAccount.movements)
         // Display balance
-        calcDisplayBalance(currentAccount.movements);
+        calcDisplayBalance(currentAccount);
         // Display summary
         calcDisplaySummary(currentAccount)
     }
 
-})
+});
 
+// Tranferers
+btnTransfer.addEventListener('click',function(e){
+    e.preventDefault();
+    const amount = Number(inputTransferAmount.value);
+    const receiverAcc = accounts.find(
+        acc=> acc.username === inputTransferTo.value
+    );
+    if(amount > 0 &&
+        currentAccount.balance >= amount && 
+        receiverAcc?.username !== currentAccount.username ){
+            console.log('Transfer valid');
+    } 
+})
 // AULA 11
 // THE FILTER METHOD
 
