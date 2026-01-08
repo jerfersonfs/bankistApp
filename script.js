@@ -302,9 +302,12 @@ btnTransfer.addEventListener('click',function(e){
         acc=> acc.username === inputTransferTo.value
     );
     if(amount > 0 &&
+        receiverAcc &&
         currentAccount.balance >= amount && 
-        receiverAcc?.username !== currentAccount.username ){
-            console.log('Transfer valid');
+        receiverAcc?.username !== currentAccount.username 
+    ){
+            currentAccount.movements.push(-amount);
+            receiverAcc.movements.push(amount);
     } 
 })
 // AULA 11
