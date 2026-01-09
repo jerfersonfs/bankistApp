@@ -262,6 +262,16 @@ const createUsernames = function(accs){
 createUsernames(accounts);
 // console.log(accounts);
 
+// function to update UI
+const updateUI = function(acc){
+         // Display movements
+        displayMovements(acc.movements)
+        // Display balance
+        calcDisplayBalance(acc);
+        // Display summary
+        calcDisplaySummary(acc)
+}
+
 let currentAccount;
 
 btnLogin.addEventListener('click',function(e){
@@ -284,30 +294,34 @@ btnLogin.addEventListener('click',function(e){
         inputLoginUsername.value = inputLoginPin.value = '';
         // Retire the cursor of the input
         inputLoginPin.blur();
-        // Display movements
-        displayMovements(currentAccount.movements)
-        // Display balance
-        calcDisplayBalance(currentAccount);
-        // Display summary
-        calcDisplaySummary(currentAccount)
+       
+
+        updateUI(currentAccount)
     }
 
 });
 
-// Tranferers
+// Tranferers planning
 btnTransfer.addEventListener('click',function(e){
     e.preventDefault();
     const amount = Number(inputTransferAmount.value);
     const receiverAcc = accounts.find(
         acc=> acc.username === inputTransferTo.value
     );
+    // clean the card 
+    inputTransferAmount.value = inputTransferTo.value = '';
+
     if(amount > 0 &&
         receiverAcc &&
         currentAccount.balance >= amount && 
         receiverAcc?.username !== currentAccount.username 
     ){
-            currentAccount.movements.push(-amount);
-            receiverAcc.movements.push(amount);
+        // Doing the transfer
+        currentAccount.movements.push(-amount);
+        receiverAcc.movements.push(amount);
+    
+            // update UI 
+            updateUI(currentAccount)
     } 
 })
 // AULA 11
