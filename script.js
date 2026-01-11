@@ -324,6 +324,24 @@ btnTransfer.addEventListener('click',function(e){
             updateUI(currentAccount)
     } 
 })
+// Resquest loan
+btnLoan.addEventListener('click',function(e){
+    e.preventDefault();
+    // get the 
+    const amount = Number(inputLoanAmount.value);
+
+    if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)){
+        // Add movement
+        currentAccount.movements.push(amount);
+
+        // Upadate UI
+        updateUI(currentAccount);
+    }
+    inputLoanAmount.value = '';
+
+})
+
+
 // findIndex Method
 btnClose.addEventListener('click', function(e){
     e.preventDefault();
@@ -429,3 +447,37 @@ console.log(avg1tt,avg2tt)
 // The find method
 const firstWithdrawal = movements.find(mov => mov <0)
 console.log(firstWithdrawal)
+
+// findLast and findLastIndex Methods
+// console.log(movements);
+const lastWithdrawal = movements.findLast(mov => mov <0);
+console.log(lastWithdrawal)
+
+const latestLargeMovementIndex = movements.findLastIndex(
+    mov => Math.abs(mov) > 2000
+)
+console.log(latestLargeMovementIndex)
+console.log(`Your latest large movement was ${movements.length - latestLargeMovementIndex} movements ago`);
+
+// some and every
+
+console.log(movements);
+
+// EQUALITY
+console.log(movements.includes(-130));
+
+// SOME: Condition
+console.log(movements.some(mov => mov === -130));
+console.log(movements.some(mov=> mov > 0));
+
+// EVERY: Condition
+console.log(movements.every(mov=> mov > 0));
+console.log(account4.movements.every(mov=> mov > 0));
+
+
+const deposit = mov => mov > 0;
+console.log(movements.every(deposit))
+console.log(movements.some(deposit))
+console.log(movements.filter(deposit))
+
+
