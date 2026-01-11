@@ -271,7 +271,7 @@ const updateUI = function(acc){
         // Display summary
         calcDisplaySummary(acc)
 }
-
+// Get the accounts on the system
 let currentAccount;
 
 btnLogin.addEventListener('click',function(e){
@@ -324,6 +324,25 @@ btnTransfer.addEventListener('click',function(e){
             updateUI(currentAccount)
     } 
 })
+// findIndex Method
+btnClose.addEventListener('click', function(e){
+    e.preventDefault();
+
+    if (inputCloseUsername.value === currentAccount.username && Number(inputClosePin.value) === currentAccount.pin){
+        const index = accounts.findIndex(
+            // Confirm if the credentials are right
+            acc => acc.username === currentAccount.username
+        );
+        console.log(index);
+
+        // Delete account
+        accounts.splice(index,1);
+
+        containerApp.style.opacity = 0;
+    }
+    inputLoginUsername.value = inputClosePin.value = '';
+})
+
 // AULA 11
 // THE FILTER METHOD
 
@@ -340,6 +359,7 @@ const withdrawals = movements.filter(function(mov){
     return mov < 0;
 })
 console.log(withdrawals)
+
 
 // These two methods are doing the same thing and pushinh the same result
 
